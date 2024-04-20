@@ -16,14 +16,19 @@ class Converter():
         self.den=den
 
     def convert_Q_to_N(self):
-        
+        #this function takes a positive rational number and maps it to a natural number
+
+        #step one  - separate out the integer portion and minimize the numerator
         self.the_Qs_Integer=math.floor(self.num/self.den)
         self.num=int(self.num-self.the_Qs_Integer*self.den)
 
+        #step two - reduce the fraction if possible
         the_gcd = math.gcd(self.den, self.num)
         self.den = int(self.den/the_gcd)
         self.num = int(self.num/the_gcd)
 
+        #step three - map the fraction to a natural number
+        #there will be a second mapping after this.
         self.first_mapping = 0
 
         if self.num>0:
@@ -37,6 +42,20 @@ class Converter():
 
             self.first_mapping += self.reduced_fractions(self.den).index(self.num)
 
+        #step four - the final mapping
+        #this is done by dividing the natural numbers in to a countable number of sequences
+        #the first sequence is the odd numbers
+        #the second sequence is multiples of 4 plus 2
+        #the third sequence is multples of 8 plus 4
+
+        #and so on
+        #we choose the sequence based on the integer portion of the number
+        #if the integer portion is zero use the first sequence
+        #if the integer portion is one use the second sequence
+        #and so on
+
+        #we then map the value from the first mapping above to the coresponding sequence
+        
         self.second_mapping_starting_point = 2**self.the_Qs_Integer
         self.second_mapping_step = 2**(self.the_Qs_Integer+1)
 
